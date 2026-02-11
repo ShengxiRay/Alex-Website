@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Spectroscopy | Future Vision 2026</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400&display=swap">
+    <style>
+        :root {
+            --primary: #00f2ff;
+            --secondary: #7000ff;
+            --bg: #030509;
+            --glass: rgba(15, 20, 30, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- Fascinating Background Animation --- */
+        .aurora-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 242, 255, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(112, 0, 255, 0.15) 0%, transparent 40%);
+            animation: pulse 10s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.2); }
+        }
+
+        /* --- Floating Navigation --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 30px 60px; position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(20px);
+        }
+
+        .logo-text { font-weight: 800; font-size: 1.2rem; letter-spacing: -1px; }
+        .logo-text span { color: var(--primary); }
+
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,0.6);
+            margin-left: 30px; font-size: 0.9rem; font-weight: 600;
+            transition: 0.4s;
+        }
+
+        .nav-links a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+
+        /* --- Main Layout --- */
+        .wrapper {
+            max-width: 1400px; margin: 0 auto; padding: 40px;
+            display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px;
+        }
+
+        /* --- The Main "Virtual Biopsy" Terminal --- */
+        .main-panel {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 40px; padding: 60px;
+            position: relative; overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .main-panel::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        h1 { font-size: 4.5rem; line-height: 0.9; margin-bottom: 20px; font-weight: 800; }
+        
+        .accent-text {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary); font-size: 0.9rem; text-transform: uppercase;
+            letter-spacing: 4px; display: block; margin-bottom: 10px;
+        }
+
+        .spectro-view {
+            width: 100%; border-radius: 24px; margin: 40px 0;
+            border: 1px solid var(--border);
+            filter: drop-shadow(0 0 20px rgba(0, 242, 255, 0.2));
+            transition: 0.5s;
+        }
+
+        .spectro-view:hover { transform: scale(1.02) rotate(-1deg); }
+
+        /* --- Interaction Hub (Right Side) --- */
+        .hub { display: grid; gap: 20px; }
+
+        .hub-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 30px; border-radius: 30px;
+            transition: 0.4s; cursor: pointer;
+        }
+
+        .hub-card:hover {
+            background: rgba(255,255,255,0.07);
+            border-color: var(--primary);
+            transform: translateX(-10px);
+        }
+
+        .hub-card h3 { margin-bottom: 10px; font-size: 1.4rem; }
+        .hub-card p { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+
+        /* --- Buttons --- */
+        .cta-button {
+            background: white; color: black;
+            padding: 20px 40px; border-radius: 100px;
+            text-decoration: none; font-weight: 800;
+            display: inline-block; margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .cta-button:hover {
+            background: var(--primary);
+            box-shadow: 0 0 30px var(--primary);
+            transform: translateY(-5px);
+        }
+
+        /* --- Navigation Buttons --- */
+        .nav-btn {
+            display: block;
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 15px 20px; border-radius: 12px;
+            text-decoration: none; font-weight: 600;
+            margin-bottom: 12px; font-size: 0.95rem;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 242, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        /* --- Modal Styles --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            margin: 10% auto;
+            padding: 40px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            background: var(--primary);
+            color: black;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 25px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+            font-size: 1rem;
+        }
+
+        .modal-btn:hover {
+            background: rgba(0, 242, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        .modal-btn.cancel {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .modal-btn.cancel:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- Publications Viewfinder --- */
+        .publications-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .publications-viewfinder {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .publications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .publications-header h2 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .close-viewfinder {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0 10px;
+            transition: 0.3s;
+        }
+
+        .close-viewfinder:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .publications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .publication-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .publication-item:hover {
+            background: rgba(0, 242, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .publication-title {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .publication-authors {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .publication-journal {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+        }
+
+        .publications-loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary);
+        }
+
+        .location-item {
+            display: flex;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.3s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .location-item:hover {
+            background: rgba(0, 242, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .location-image {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .location-content {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .location-name {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.15rem;
+            line-height: 1.5;
+        }
+
+        .location-address {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        /* --- Staff Pulse Tags --- */
+        .tag-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+        .tag {
+            background: rgba(112, 0, 255, 0.2);
+            border: 1px solid var(--secondary);
+            padding: 6px 15px; border-radius: 50px; font-size: 0.9rem;
+        }
+
+        /* --- Formal Section Styles --- */
+        .formal-header {
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 30px;
+        }
+
+        .formal-subtitle {
+            font-size: 0.95rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .formal-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 40px;
+        }
+
+        .formal-description {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.15rem;
+            line-height: 1.8;
+            max-width: 700px;
+        }
+
+        .investigator-section {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .investigator-label {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .investigator-name {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .investigator-title {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.6);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 1100px) {
+            .wrapper { grid-template-columns: 1fr; }
+            h1 { font-size: 3rem; }
+            .formal-title { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aurora-bg"></div>
+
+    <nav>
+        <div class="logo-text">BWH <span>SPECTROSCOPY</span></div>
+        <div class="nav-links">
+            <a href="#" onclick="openLocationsViewfinder(); return false;">LOCATION</a>
+            <a href="#" onclick="openGivingViewfinder(); return false;">GIVING</a>
+            <a href="#" onclick="openRadiologyViewfinder(); return false;" style="color: white; border: 1px solid white; padding: 8px 20px; border-radius: 50px;">GATEWAY</a>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <main class="main-panel">
+            <div class="formal-header">
+                <span class="formal-subtitle">Bridging Human Chemistry & Data</span>
+                <h1 class="formal-title">Center for Clinical Spectroscopy</h1>
+                <p class="formal-description">
+                    Leading the evolution of <strong>Virtual Biopsies</strong>. We translate molecular data into life-saving clinical insights.
+                </p>
+            </div>
+
+            <div class="investigator-section">
+                <span class="investigator-label">Lead Investigator</span>
+                <div class="investigator-name">Alexander Lin, PhD</div>
+                <p class="investigator-title">Translating magnetic resonance into clinical reality.</p>
+            </div>
+
+            <img src="https://www.brighamandwomens.org/assets/BWH/radiology/images/cosy_rotate.gif" class="spectro-view">
+
+            <div class="tag-container">
+                <div class="tag">Traumatic Brain Injury</div>
+                <div class="tag">Neurodegeneration</div>
+                <div class="tag">Metabolic Disorders</div>
+                <div class="tag">Oncology</div>
+            </div>
+        </main>
+
+        <aside class="hub">
+            <div class="hub-card" onclick="openPublicationsViewfinder()">
+                <span class="accent-text">Research</span>
+                <h3>Current Studies</h3>
+                <p>Join our active research into military health and veteran neuroimaging.</p>
+                <p style="color: var(--primary); font-size: 0.8rem; margin-top: 15px;">→ Click to view publications</p>
+            </div>
+
+            <div class="hub-card" onclick="openResearchStaffViewfinder()">
+                <span class="accent-text">Team</span>
+                <h3>Research Staff</h3>
+                <p>Meet our PhD fellows and SSJP student researchers.</p>
+                <p style="color: var(--primary); font-size: 0.8rem; margin-top: 15px;">→ Click to visit labs</p>
+            </div>
+
+            <div class="hub-card" onclick="openAdvisorsViewfinder();" style="border-color: var(--secondary);">
+                <span class="accent-text" style="color: var(--secondary);">Leadership</span>
+                <h3>Advisors</h3>
+                <p>Strategic oversight by global leaders in radiology.</p>
+                <p style="color: var(--primary); font-size: 0.8rem; margin-top: 15px;">→ Click to view directory</p>
+            </div>
+
+            <div style="padding: 20px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Contact Lab</h3>
+                <p style="font-size: 1.3rem; margin-bottom: 10px;">Email: <strong>spectro@partners.org</strong></p>
+                <p style="font-size: 1.3rem; margin-bottom: 15px;">Phone: <strong>617-732-5500</strong></p>
+                <button onclick="openAppointmentModal()" class="cta-button" style="font-size: 1.2rem; border: none; cursor: pointer;">Request Appointment</button>
+            </div>
+        </aside>
+    </div>
+
+    <div id="appointmentModal" class="modal">
+        <div class="modal-content">
+            <h2>How would you like to reach us?</h2>
+            <div class="modal-buttons">
+                <button class="modal-btn" onclick="window.location.href='https://mail.google.com/mail/?view=cm&fs=1&to=spectro@partners.org'; closeAppointmentModal();">📧 Email Us</button>
+                <button class="modal-btn" onclick="window.location.href='tel:+16177325500'; closeAppointmentModal();">📞 Call Us</button>
+                <button class="modal-btn cancel" onclick="closeAppointmentModal();">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="publicationsModal" class="publications-modal">
+        <div class="publications-viewfinder">
+            <div class="publications-header">
+                <h2>Latest Publications by Alexander Lin, PhD</h2>
+                <button class="close-viewfinder" onclick="closePublicationsViewfinder();">×</button>
+            </div>
+            <div class="publications-list" id="publicationsContainer">
+                <div class="publications-loading">Loading publications...</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="locationsModal" class="publications-modal">
+        <div class="publications-viewfinder">
+            <div class="publications-header">
+                <h2>Brigham and Women's Hospital Locations</h2>
+                <button class="close-viewfinder" onclick="closeLocationsViewfinder();">×</button>
+            </div>
+            <div class="publications-list" id="locationsContainer">
+                <div class="publications-loading">Loading locations...</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="givingModal" class="publications-modal">
+        <div class="publications-viewfinder" style="max-width: 1000px; padding: 0;">
+            <div class="publications-header" style="border-radius: 30px 30px 0 0;">
+                <h2>Support Brigham and Women's Hospital</h2>
+                <button class="close-viewfinder" onclick="closeGivingViewfinder();">×</button>
+            </div>
+            <iframe id="givingFrame" src="https://giving.brighamandwomens.org/give1/?appeal=25XXAGWM&utm_medium=web&utm_source=bwhgiving&utm_campaign=25XXAGWM&utm_content=donatebuttonheader&pk_vid=087b135a2f3dba5417707579219efc10" style="width: 100%; height: 600px; border: none; border-radius: 0 0 30px 30px;"></iframe>
+        </div>
+    </div>
+
+    <div id="radiologyModal" class="publications-modal">
+        <div class="publications-viewfinder" style="max-width: 1000px; padding: 0;">
+            <div class="publications-header" style="border-radius: 30px 30px 0 0;">
+                <h2>Brigham and Women's Radiology</h2>
+                <button class="close-viewfinder" onclick="closeRadiologyViewfinder();">×</button>
+            </div>
+            <iframe src="https://www.brighamandwomens.org/radiology" style="width: 100%; height: 600px; border: none; border-radius: 0 0 30px 30px;"></iframe>
+        </div>
+    </div>
+
+    <div id="researchStaffModal" class="publications-modal">
+        <div class="publications-viewfinder">
+            <div class="publications-header">
+                <h2>Research Staff</h2>
+                <button class="close-viewfinder" onclick="closeResearchStaffViewfinder();">×</button>
+            </div>
+            <div class="publications-list" id="researchStaffContainer">
+                <a href="https://www.ncbi.nlm.nih.gov/myncbi/katherine.breedlove.1/bibliography/public/" target="_blank" style="text-decoration: none;">
+                    <div class="publication-item" style="display: flex; align-items: center;">
+                        <img src="staff_headshot/1.jpeg" alt="Staff Headshot" class="location-image">
+                        <div class="location-content">
+                            <p style="font-weight: bold; font-size: 1.2rem; margin-bottom: 5px; color: white;">Breedlove, Katherine M.</p>
+                            <span style="color: var(--primary); font-size: 1rem; text-decoration: none;">View her publications</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="advisorsModal" class="publications-modal">
+        <div class="publications-viewfinder" style="max-width: 1000px; padding: 0;">
+            <div class="publications-header" style="border-radius: 30px 30px 0 0;">
+                <h2>Physician Directory</h2>
+                <button class="close-viewfinder" onclick="closeAdvisorsViewfinder();">×</button>
+            </div>
+            <iframe src="https://physiciandirectory.brighamandwomens.org/?Specialties=34&pk_vid=1ed6565ddd0ab4a917706558909efc10" style="width: 100%; height: 600px; border: none; border-radius: 0 0 30px 30px;"></iframe>
+        </div>
+    </div>
+
+    <footer style="padding: 60px; text-align: center; opacity: 0.4; font-size: 1.0rem; letter-spacing: 2px;">
+        © 2026 BRIGHAM AND WOMEN'S HOSPITAL | QUANTUM DIAGNOSTICS DIVISION
+    </footer>
+
+    <script>
+        let publicationsCache = [];
+        const NCBI_URL = 'https://www.ncbi.nlm.nih.gov/myncbi/alexander.lin.2/bibliography/public/';
+
+        function openAppointmentModal() {
+            document.getElementById('appointmentModal').style.display = 'block';
+        }
+
+        function closeAppointmentModal() {
+            document.getElementById('appointmentModal').style.display = 'none';
+        }
+
+        function openPublicationsViewfinder() {
+            document.getElementById('publicationsModal').style.display = 'block';
+            fetchPublications();
+        }
+
+        function closePublicationsViewfinder() {
+            document.getElementById('publicationsModal').style.display = 'none';
+        }
+
+        function fetchPublications() {
+            const publications = [
+                {
+                    title: "Brain creatine concentrations are associated with sex and symptom severity after concussion: a cross-sectional MR-spectroscopy investigation of adolescents with concussion",
+                    authors: "Howell DR, Keeter CL, Hatolkar V, et al",
+                    journal: "Brain Inj. 2026 Jan 7",
+                    pmid: "41504207",
+                    url: "https://pubmed.ncbi.nlm.nih.gov/41504207/"
+                },
+                {
+                    title: "Real-time neurofeedback, its neurotransmitter underpinnings, and therapeutic effects: study protocol for a randomized controlled trial in individuals at clinical high risk",
+                    authors: "Vandewouw MM, Bauer CCC, Zhang J, et al",
+                    journal: "BMC Psychiatry. 2025 Dec 6;26(1):30",
+                    pmid: "41353354",
+                    url: "https://pubmed.ncbi.nlm.nih.gov/41353354/"
+                },
+                {
+                    title: "Diffusion Alterations at the Gray Matter/White Matter Boundary in Traumatic Encephalopathy Syndrome",
+                    authors: "Wiegand TLT, Pankatz L, Arciniega H, et al",
+                    journal: "J Neurotrauma. 2025 Nov 10",
+                    pmid: "41218808",
+                    url: "https://pubmed.ncbi.nlm.nih.gov/41218808/"
+                },
+                {
+                    title: "Shape analysis of the amygdala, hippocampus and thalamus in former American football players",
+                    authors: "John O, Wickham A, Jung LB, et al",
+                    journal: "Brain Commun. 2025;7(6):fcaf440",
+                    pmid: "41277896",
+                    url: "https://pubmed.ncbi.nlm.nih.gov/41277896/"
+                },
+                {
+                    title: "Characterizing Intimate Partner Violence-Related Head Trauma in Community-Recruited Women",
+                    authors: "Esopenko C, Jain D, Hicks AJ, et al",
+                    journal: "J Head Trauma Rehabil. 2025 Nov-Dec 01;40(6):E514-E523",
+                    pmid: "40366341",
+                    url: "https://pubmed.ncbi.nlm.nih.gov/40366341/"
+                }
+            ];
+            
+            displayPublications(publications);
+        }
+
+        function parsePublications(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            const publications = [];
+            const items = doc.querySelectorAll('[data-article-id], .rprt, article');
+            
+            for (let i = 0; i < Math.min(items.length, 20); i++) {
+                const item = items[i];
+                const title = item.querySelector('a[data-title], .title a, h3 a')?.textContent || 'Publication';
+                const authors = item.querySelector('.authors, .authorlist')?.textContent || 'Authors information';
+                const journal = item.querySelector('.journal, .citation, .source')?.textContent || 'Journal';
+                
+                if (title && title.trim()) {
+                    publications.push({ title, authors, journal });
+                }
+            }
+            
+            return publications;
+        }
+
+        function displayPublications(publications) {
+            const container = document.getElementById('publicationsContainer');
+            const NCBI_URL = 'https://www.ncbi.nlm.nih.gov/myncbi/alexander.lin.2/bibliography/public/';
+            
+            if (publications.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: rgba(255,255,255,0.7);">
+                        <p>To find more Visit the NCBI bibliography:</p>
+                        <a href="${NCBI_URL}" target="_blank" style="background: white; color: black; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-size: 1rem; font-weight: 600; display: inline-block; transition: 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">View Publications on NCBI</a>
+                        <p style="margin-top: 20px; font-size: 0.9rem;">Last updated: ${new Date().toLocaleString()}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = publications.map((pub, index) => `
+                <a href="${pub.url || '#'}" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="publication-item" style="cursor: pointer;">
+                        <div class="publication-title">${index + 1}. ${pub.title}</div>
+                        <div class="publication-authors">${pub.authors}</div>
+                        <div class="publication-journal">${pub.journal}</div>
+                    </div>
+                </a>
+            `).join('');
+
+            container.innerHTML += `
+                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);">
+                    <p style="color: rgba(255,255,255,0.7); margin-bottom: 12px;">To find more Visit the NCBI bibliography:</p>
+                    <a href="${NCBI_URL}" target="_blank" style="background: white; color: black; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-size: 1rem; font-weight: 600; display: inline-block; transition: 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">View Publications on NCBI</a>
+                    <p style="margin-top: 15px; font-size: 0.9rem; color: rgba(255,255,255,0.5);">Last updated: ${new Date().toLocaleString()}</p>
+                </div>
+            `;
+        }
+
+        setInterval(() => {
+            if (document.getElementById('publicationsModal').style.display === 'block') {
+                fetchPublications();
+            }
+        }, 172800000);
+
+        window.onclick = function(event) {
+            const appointmentModal = document.getElementById('appointmentModal');
+            const publicationsModal = document.getElementById('publicationsModal');
+            const locationsModal = document.getElementById('locationsModal');
+            const givingModal = document.getElementById('givingModal');
+            const radiologyModal = document.getElementById('radiologyModal');
+            const researchStaffModal = document.getElementById('researchStaffModal');
+            const advisorsModal = document.getElementById('advisorsModal');
+            
+            if (event.target == appointmentModal) {
+                appointmentModal.style.display = 'none';
+            }
+            if (event.target == publicationsModal) {
+                publicationsModal.style.display = 'none';
+            }
+            if (event.target == locationsModal) {
+                locationsModal.style.display = 'none';
+            }
+            if (event.target == givingModal) {
+                givingModal.style.display = 'none';
+            }
+            if (event.target == radiologyModal) {
+                radiologyModal.style.display = 'none';
+            }
+            if (event.target == researchStaffModal) {
+                researchStaffModal.style.display = 'none';
+            }
+            if (event.target == advisorsModal) {
+                advisorsModal.style.display = 'none';
+            }
+        }
+
+        function openLocationsViewfinder() {
+            document.getElementById('locationsModal').style.display = 'block';
+            fetchLocations();
+        }
+
+        function closeLocationsViewfinder() {
+            document.getElementById('locationsModal').style.display = 'none';
+        }
+
+        function openGivingViewfinder() {
+            document.getElementById('givingModal').style.display = 'block';
+        }
+
+        function closeGivingViewfinder() {
+            document.getElementById('givingModal').style.display = 'none';
+        }
+
+        function openRadiologyViewfinder() {
+            document.getElementById('radiologyModal').style.display = 'block';
+        }
+
+        function closeRadiologyViewfinder() {
+            document.getElementById('radiologyModal').style.display = 'none';
+        }
+
+        function openResearchStaffViewfinder() {
+            document.getElementById('researchStaffModal').style.display = 'block';
+        }
+
+        function closeResearchStaffViewfinder() {
+            document.getElementById('researchStaffModal').style.display = 'none';
+        }
+
+        function openAdvisorsViewfinder() {
+            document.getElementById('advisorsModal').style.display = 'block';
+        }
+
+        function closeAdvisorsViewfinder() {
+            document.getElementById('advisorsModal').style.display = 'none';
+        }
+
+        function fetchLocations() {
+            const locations = [
+                {
+                    name: "Brigham and Women's Hospital - Main Campus",
+                    address: "75 Francis Street, Boston, MA 02115",
+                    mapsUrl: "https://www.google.com/maps/dir//%E5%B8%83%E8%8E%B1%E6%A0%B9%E5%A6%87%E5%A5%B3%E5%8C%BB%E9%99%A2/@42.335631,-71.1081301,18z/data=!3m1!5s0x89e37a04d361a3df:0x42149904d2fdea5c!4m15!1m8!3m7!1s0x89e3798e6a7fdc45:0x535b2f09ee02b89e!2zNzUgRnJhbmNpcyBTdCwgQm9zdG9uLCBNQSAwMjExNee-juWbvQ!3b1!8m2!3d42.336061!4d-71.1071584!16s%2Fg%2F11c26fy6n1!3m5!1s0x89e3798e64f59d2d:0x2762dfa4fc548043!8m2!3d42.3361779!4d-71.1068499!16zL20vMDVnYmdm?entry=ttu&g_ep=EgoyMDI2MDIwOC4wIKXMDSoASAFQAw%3D%3D",
+                    image: "location_pictures/bwh.png"
+                },
+                {
+                    name: "Brigham and Women's Faulkner Hospital",
+                    address: "1153 Center Street, Boston, MA 02130",
+                    mapsUrl: "https://www.google.com/maps/dir//Brigham+and+Women's+Faulkner+Hospital/@42.301424,-71.1307762,17z/data=!3m2!4b1!5s0x89e37f2b3b42635f:0x6dd9dba039f358c!4m6!3m5!1s0x89e3793bec018837:0x95e3cc6725f3909b!8m2!3d42.3014201!4d-71.1281959!16s%2Fm%2F04g3cs7?entry=ttu&g_ep=EgoyMDI2MDIwOC4wIKXMDSoASAFQAw%3D%3D",
+                    image: "location_pictures/bwfh.png"
+                },
+                {
+                    name: "Dana-Farber Brigham Cancer Institute",
+                    address: "75 Francis Street and 450 Brookline Avenue, Boston, MA 02115",
+                    mapsUrl: "https://www.google.com/maps/dir//%E4%B8%B9%E9%82%A3-%E6%B3%95%E5%8D%9A%E7%99%8C%E7%97%87%E7%A0%94%E7%A9%B6%E6%89%80/@42.337417,-71.1083302,18z/data=!3m2!4b1!5s0x89e648661dddcd4b:0x1f430dc6a5103c72!4m6!3m5!1s0x89e3798de681fccd:0x28872ef16d5e4f18!8m2!3d42.337417!4d-71.1083302!16zL20vMDg2MzFm?entry=ttu&g_ep=EgoyMDI2MDIwOC4wIKXMDSoASAFQAw%3D%3D",
+                    image: "location_pictures/dfbci.png"
+                },
+                {
+                    name: "Brigham and Women's Harbour Medical Associates",
+                    address: "850 Winter Street, Waltham, MA 02451",
+                    mapsUrl: "https://www.google.com/maps/dir//Brigham+and+Women's+Harbor+Medical+Associates,+541+Main+St+Suite+314,+South+Weymouth,+MA+02190%E7%BE%8E%E5%9B%BD/@42.2172643,-70.967692,13.52z/data=!4m17!1m8!3m7!1s0x89e362874e798cf9:0x1a6ff90272145b4e!2sBrigham+and+Women's+Harbor+Medical+Associates!8m2!3d42.1879647!4d-70.9558874!15sCi5CcmlnaGFtIGFuZCBXb21lbidzIEhhcmJvdXIgTWVkaWNhbCBBc3NvY2lhdGVzIgOIAQFaMCIuYnJpZ2hhbSBhbmQgd29tZW4ncyBoYXJib3VyIG1lZGljYWwgYXNzb2NpYXRlc5IBDW1lZGljYWxfZ3JvdXCaASNDaFpEU1VoTk1HOW5TMFZKUTBGblNVTkVlR05VVTFKUkVBReABAPoBBQiKARAu!16s%2Fg%2F1tl0ybsg!4m7!1m0!1m5!1m1!1s0x89e362874e798cf9:0x1a6ff90272145b4e!2m2!1d-70.9558874!2d42.1879647?entry=ttu&g_ep=EgoyMDI2MDIwOC4wIKXMDSoASAFQAw%3D%3D",
+                    image: "location_pictures/bwhma.png"
+                },
+                {
+                    name: "Brigham and Women's Hospital - Specialty Centers",
+                    address: "221 Longwood Avenue, Boston, MA 02115",
+                    mapsUrl: "https://www.google.com/maps/dir//Brigham+and+Women's+Hospital+-+Specialty+Centers,+221+Longwood+Ave,+Boston,+MA+02115%E7%BE%8E%E5%9B%BD/@42.3387,-71.1074,17z/data=!4m17!1m8!3m7!1s0x89e37a04d361a3df:0x42149904d2fdea5c!2sBrigham+and+Women's+Hospital+-+Specialty+Centers!8m2!3d42.338696!4d-71.107395!15sCi5CcmlnaGFtIGFuZCBXb21lbidzIGhpbnRvbiAtIFNwZWNpYWwgQ2VudGVycyIgKIAQFagwIi5icmlnaGFtIGFuZCB3b21lbidzIGhpbnRvbiAtIHNwZWNpYWwgY2VudGVycyKQAQJpYnJpZ2hhbSBhbmQgd29tZW4ncyBoaW50b24gLSBzcGVjaWFsIGNlbnRlcnMaASNDaFpEU1VoTk1HOW5TMFZKUTBGblNVTkVlR05VVTFKUkVBReABAPoBBQiKARAu!16s%2Fg%2F1tl0ybsg!4m7!1m0!1m5!1m1!1s0x89e37a04d361a3df:0x42149904d2fdea5c!2m2!1d-71.107395!2d42.338696?entry=ttu&g_ep=EgoyMDI2MDIwOC4wIKXMDSoASAFQAw%3D%3D",
+                    image: "location_pictures/bwhsc.png"
+                }
+            ];
+            
+            displayLocations(locations);
+        }
+
+        function displayLocations(locations) {
+            const container = document.getElementById('locationsContainer');
+            const LOCATIONS_URL = 'https://www.brighamandwomens.org/about-bwh/brigham-and-womens-hospital-locations-and-affiliates';
+            
+            if (locations.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: rgba(255,255,255,0.7);">
+                        <p>To find more locations visit:</p>
+                        <a href="${LOCATIONS_URL}" target="_blank" style="background: white; color: black; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-size: 1rem; font-weight: 600; display: inline-block; transition: 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">View All Locations</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = locations.map((loc) => `
+                <a href="${loc.mapsUrl}" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="location-item">
+                        <img src="${loc.image}" alt="${loc.name}" class="location-image" onerror="this.src='https://via.placeholder.com/140?text=BWH'">
+                        <div class="location-content">
+                            <div class="location-name">${loc.name}</div>
+                            <div class="location-address">${loc.address}</div>
+                            <div style="color: var(--primary); font-size: 0.85rem; margin-top: 8px;">📍 View on Google Maps</div>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+
+            container.innerHTML += `
+                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);">
+                    <p style="color: rgba(255,255,255,0.7); margin-bottom: 12px;">To find more locations visit:</p>
+                    <a href="${LOCATIONS_URL}" target="_blank" style="background: white; color: black; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-size: 1rem; font-weight: 600; display: inline-block; transition: 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">View All Locations</a>
+                </div>
+            `;
+        }
+    </script>
+
+</body>
+</html>
