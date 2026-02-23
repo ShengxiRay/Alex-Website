@@ -4,15 +4,19 @@ const apiKey = '353773bf728d87aa705834f27b1f41b13508';
         // const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 Hours
         // const NCBI_URL = 'https://www.ncbi.nlm.nih.gov/myncbi/alexander.lin.2/bibliography/public/';
         // localStorage.removeItem(CACHE_KEY);
+        // const searchTerm = 'alexander.lin.2[MyNCBI+Bibliography]';
+        // const searchTerm = 'Alexander+Peter+Lin';
+        // const searchURL = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${searchTerm}&sort=pub_date&retstart=0&retmax=10&retmode=json&api_key=${apiKey}`;
+        const proxy = "https://cors-anywhere.herokuapp.com/";
         const searchTerm = 'alexander.lin.2[MyNCBI+Bibliography]';
-        const searchURL = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${searchTerm}&sort=pub_date&retmode=json&api_key=${apiKey}`;
+        const baseUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${searchTerm}&sort=pub_date&retstart=1&retmax=4&retmode=json`;
 
+        const searchURL = proxy + baseUrl;
         const CACHE_KEY = 'pubmed_publications_cache';
         const CACHE_DURATION = 24 * 60 * 60 * 1000; 
         const NCBI_URL = 'https://www.ncbi.nlm.nih.gov/myncbi/alexander.lin.2/bibliography/public/';
 
-        // CLEAR OLD CACHE: Run this once to wipe the old 2022 results from your browser
-        localStorage.removeItem(CACHE_KEY);
+        localStorage.removeItem('pubmed_publications_cache');
         // --- 2. MODAL CONTROLS ---
         function openAppointmentModal() { document.getElementById('appointmentModal').style.display = 'block'; }
         function closeAppointmentModal() { document.getElementById('appointmentModal').style.display = 'none'; }
@@ -32,7 +36,7 @@ const apiKey = '353773bf728d87aa705834f27b1f41b13508';
                 if (!searchResponse.ok) throw new Error('PubMed Search Failed'); //
                 
                 const searchData = await searchResponse.json();
-                const ids = searchData.esearchresult.idlist.slice(0, 5).join(',');
+                const ids = searchData.esearchresult.idlist.join(','); 
 
                 if (ids) {
                     const summaryURL = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${ids}&retmode=json&api_key=${apiKey}`;
@@ -63,10 +67,9 @@ const apiKey = '353773bf728d87aa705834f27b1f41b13508';
                     {
                         title: "Brain creatine concentrations are associated with sex and symptom severity after concussion...",
                         authors: "Howell DR, Keeter CL, Hatolkar V, et al",
-                        journal: "Brain Inj. 2026 Jan 7",
+                        journal: "Brain Inj. 2026 Jan 7;",
                         url: "https://pubmed.ncbi.nlm.nih.gov/41504207/"
                     }
-                    // Add other fallbacks from your original list
                 ];
                 displayPublications(fallback);
             }
